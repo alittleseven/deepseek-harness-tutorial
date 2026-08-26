@@ -9,9 +9,9 @@ const { loading } = useRouteLoading()
 
 <template>
   <Layout>
-    <!-- 顶部进度条：仅在路由切换加载期间显示 -->
+    <!-- 居中加载转圈：仅在路由切换加载期间淡入，加载完成淡出 -->
     <template #layout-top>
-      <RouteLoadingBar v-if="loading" />
+      <RouteLoadingBar :active="loading" />
     </template>
   </Layout>
 </template>

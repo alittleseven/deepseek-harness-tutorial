@@ -1,53 +1,49 @@
 <script setup>
-// 顶部不定长进度条，用于章节（页面）切换时提示“正在加载”。
-// 通过 <Teleport to="body"> 挂到 body 下，position: fixed 恒贴视口顶部，不占布局高度。
+// 章节（页面）切换时，居中显示一个转圈（Spinner）加载指示。
+// 通过 <Teleport to="body"> 挂到 body；常驻挂载，用 active 控制淡入淡出，避免闪烁。
+// pointer-events:none 不阻挡任何点击（即使异常时也不会卡住操作）。
+defineProps({
+  active: { type: Boolean, default: false },
+})
 </script>
 
 <template>
   <Teleport to="body">
-    <div class="route-loading-bar" aria-hidden="true">
-      <div class="route-loading-bar__track" />
-      <div class="route-loading-bar__fill" />
+    <div class="route-loading" :class="{ 'is-active': active }" aria-hidden="true">
+      <div class="route-loading__spinner" />
     </div>
   </Teleport>
 </template>
 
 <style scoped>
-.route-loading-bar {
+.route-loading {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 2147483000;
-  overflow: hidden;
   pointer-events: none;
-  background-color: rgba(62, 99, 221, 0.12);
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
-.route-loading-bar__fill {
-  position: absolute;
-  top: 0;
-  left: -40%;
-  width: 40%;
-  height: 100%;
-  border-radius: 999px;
-  background-color: #3e63dd;
-  animation: route-loading-slide 1.1s ease-in-out infinite;
+.route-loading.is-active {
+  opacity: 1;
 }
 
-@keyframes route-loading-slide {
-  0% {
-    left: -40%;
-    width: 40%;
-  }
-  50% {
-    left: 35%;
-    width: 30%;
-  }
-  100% {
-    left: 100%;
-    width: 45%;
+.route-loading__spinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 4px solid rgba(62, 99, 221, 0.18);
+  border-top-color: #3e63dd;
+  animation: route-loading-spin 0.85s linear infinite;
+}
+
+@keyframes route-loading-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
