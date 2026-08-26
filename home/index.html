@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>教程合集 · tutorial.baimuyuan.online</title>
+<meta name="description" content="淡蓝·赛博·像素 风格的教程合集首页，收录各类技术教程。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230ea5d0'/%3E%3Crect x='6' y='6' width='20' height='20' fill='%23eaf6ff'/%3E%3Crect x='12' y='12' width='8' height='8' fill='%230d3b58'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#e8f6ff;
+    --bg2:#d9eefc;
+    --ink:#0d3b58;
+    --ink-soft:#3a6d89;
+    --cyan:#12c2e8;
+    --cyan-strong:#05a5d1;
+    --cyan-glow:#8ff5ff;
+    --line:#a8d7ee;
+    --card:#f7fdff;
+    --ok:#2fd09a;
+    --ok-ink:#0d4a37;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,#f2faff 0%, var(--bg) 32%, var(--bg2) 100%);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* 像素网格背景 */
+  .bg-grid{
+    position:fixed; inset:0; z-index:-3; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(18,194,232,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18,194,232,.10) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+  /* 扫描线 */
+  .bg-scanlines{
+    position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.5;
+    background:repeating-linear-gradient(0deg,
+      rgba(18,194,232,.05) 0px, rgba(18,194,232,.05) 1px,
+      transparent 1px, transparent 4px);
+  }
+  /* 顶部淡蓝辉光 */
+  .bg-glow{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(60% 40% at 50% 0%, rgba(18,194,232,.18), transparent 70%),
+      radial-gradient(45% 30% at 12% 88%, rgba(18,194,232,.10), transparent 70%),
+      radial-gradient(45% 30% at 88% 70%, rgba(18,194,232,.12), transparent 70%);
+  }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 20px 72px; }
+
+  /* 顶部 HUD 条 */
+  .hud{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; padding:16px 0; margin-bottom:26px;
+    font-family:"Courier New",ui-monospace,SFMono-Regular,monospace;
+    border-bottom:3px solid var(--ink);
+    color:var(--ink);
+  }
+  .hud__brand{ font-weight:700; letter-spacing:2px; }
+  .hud__brand b{ color:var(--cyan-strong); }
+  .hud__status{
+    display:flex; align-items:center; gap:8px;
+    font-size:13px; letter-spacing:1px;
+    color:var(--ok-ink);
+  }
+  .hud__status .dot{
+    width:11px; height:11px; background:var(--ok);
+    box-shadow:0 0 0 3px rgba(47,208,154,.25), 0 0 10px var(--ok);
+    animation:blink 1.4s steps(2,start) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:.35; } }
+
+  .hud__time{
+    font-size:12px; color:var(--ink-soft); opacity:.8; letter-spacing:1px;
+  }
+
+  /* 英雄区 */
+  .hero{ padding:34px 0 14px; }
+  .hero__tag{
+    display:inline-block; font-family:"Courier New",monospace;
+    font-size:13px; letter-spacing:1px;
+    color:var(--cyan-strong);
+    padding:4px 10px; border:2px solid var(--line);
+    background:rgba(255,255,255,.6);
+    margin-bottom:18px;
+  }
+  .hero__title{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:clamp(44px, 9vw, 82px);
+    font-weight:900; line-height:1.02; letter-spacing:2px;
+    color:var(--ink);
+    text-shadow:4px 4px 0 rgba(18,194,232,.28);
+  }
+  .hero__title .accent{ color:var(--cyan-strong); }
+  .hero__cursor{
+    display:inline-block; width:.55em; height:.75em;
+    background:var(--cyan-strong); margin-left:4px;
+    animation:blink 1s steps(2,start) infinite;
+    vertical-align:baseline;
+  }
+  .hero__sub{
+    margin-top:18px; max-width:640px; line-height:1.8;
+    font-size:17px; color:var(--ink-soft);
+  }
+  .hero__meta{
+    margin-top:20px; font-family:"Courier New",monospace;
+    font-size:13px; letter-spacing:1px; color:var(--cyan-strong);
+  }
+  .hero__meta .scanline{
+    display:inline-block; width:100%; max-width:520px; height:2px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+    margin-top:10px;
+    animation:scan 2.6s linear infinite;
+  }
+  @keyframes scan{ 0%{ transform:translateX(-100%);} 100%{ transform:translateX(100%);} }
+
+  /* 收录区块 */
+  .tutorials{ margin-top:40px; }
+  .tutorials__head{
+    display:flex; align-items:baseline; gap:12px;
+    font-family:"Courier New",monospace;
+    font-size:15px; letter-spacing:1px;
+    color:var(--ink);
+    text-transform:uppercase; margin-bottom:20px;
+  }
+  .tutorials__head .count{
+    font-weight:700; color:var(--cyan-strong);
+  }
+  .tutorials__head small{ color:var(--ink-soft); font-size:12px; }
+
+  .grid{
+    display:grid; gap:22px;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  /* 卡片（像素边框 + 硬投影） */
+  .card{
+    position:relative;
+    display:flex; flex-direction:column; gap:14px;
+    padding:22px;
+    border:3px solid var(--ink);
+    border-radius:0;                       /* 像素：直角 */
+    background:var(--card);
+    box-shadow:8px 8px 0 rgba(13,59,88,.18);
+    text-decoration:none; color:var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+    overflow:hidden;
+  }
+  .card:hover{ transform:translate(-2px,-2px); box-shadow:12px 12px 0 rgba(18,194,232,.35); }
+  .card::after{                            /* 角落装饰像素 */
+    content:""; position:absolute; top:8px; right:8px;
+    width:10px; height:10px; background:var(--cyan); opacity:.55;
+  }
+  .card__top{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:"Courier New",monospace; font-size:12px; letter-spacing:1px;
+  }
+  .card__icon{ font-size:26px; line-height:1; }
+  .card__badge{
+    padding:3px 8px; border:2px solid var(--ok); color:var(--ok-ink);
+    background:rgba(47,208,154,.12); font-weight:700;
+  }
+  .card__badge.warn{ border-color:#e6a33c; color:#8a5a12; background:rgba(230,163,60,.12); } /* 占位 */
+  .card__title{
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:21px; font-weight:800; line-height:1.25; letter-spacing:.5px;
+  }
+  .card__desc{ font-size:15px; line-height:1.75; color:var(--ink-soft); flex:1; }
+  .card__tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .card__tags span{
+    font-family:"Courier New",monospace; font-size:12px;
+    padding:3px 8px; border:2px solid var(--line); color:var(--ink);
+    background:rgba(255,255,255,.6);
+  }
+  .card__cta{
+    font-family:"Courier New",monospace; font-weight:700; letter-spacing:1px;
+    color:var(--cyan-strong); font-size:15px;
+  }
+  .card__cta::after{ content:" ▶"; }
+  .card:hover .card__cta{ text-decoration:underline; }
+
+  /* 占位卡片 */
+  .card.soon{ pointer-events:none; opacity:.62; }
+  .card.soon::after{ content:""; position:absolute; top:8px; right:8px; width:10px; height:10px; background:#cfe4f2; }
+  .card.soon .card__cta{ color:var(--ink-soft); font-weight:400; }
+  .card.soon .card__cta::after{ content:"  …"; }
+
+  /* 页脚 */
+  footer{ margin-top:52px; padding-top:22px; border-top:3px solid var(--ink); }
+  .footer__row{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;
+    font-family:"Courier New",monospace; font-size:13px; letter-spacing:1px;
+    color:var(--ink-soft);
+  }
+  .footer__row a{ color:var(--cyan-strong); text-decoration:none; }
+  .footer__row a:hover{ text-decoration:underline; }
+  .footer__pix{ display:flex; gap:5px; }
+  .footer__pix i{ width:12px; height:12px; background:var(--cyan); opacity:.4; }
+
+  @media (max-width:560px){
+    .hud__time{ display:none; }
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-scanlines"></div>
+  <div class="bg-glow"></div>
+
+  <header class="hud">
+    <div class="hud__brand">▶ <b>TUTORIAL</b>.HUB</div>
+    <div class="hud__status"><span class="dot"></span> SYSTEM ONLINE</div>
+    <div class="hud__time" id="clock">--:--:--</div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero__tag">//dev/tutorials/collection</div>
+      <h1 class="hero__title">教程<span class="accent">合集</span><span class="hero__cursor"></span></h1>
+      <p class="hero__sub">淡蓝 · 赛博 · 像素。把零散的技术教程一一收录、像芯片一样叠加，形成一个可检索、可持续生长的知识矩阵。</p>
+      <div class="hero__meta">&gt; 正在扫描本地知识库 … 已收录 <b id="num">1</b> 套教程
+        <span class="scanline"></span>
+      </div>
+    </section>
+
+    <section class="tutorials">
+      <div class="tutorials__head">
+        <span>// 收录教程</span>
+        <span class="count">[ <span id="num2">1</span> ]</span>
+        <small>CYBER-PIXEL EDITION</small>
+      </div>
+
+      <div class="grid">
+        <!-- 已收录：DeepSeek Harness 源码教程 -->
+        <a class="card" href="/deepseek-harness-tutorial/">
+          <div class="card__top">
+            <span class="card__icon">🤖</span>
+            <span class="card__badge">已收录</span>
+          </div>
+          <h2 class="card__title">DeepSeek Harness 源码教程</h2>
+          <p class="card__desc">深入插件式 Agent 运行时：Cordis 依赖容器、插件树、Fiber 状态机、事件扩展点、Agent Loop、提示词与 LLM 适配器。十七章源码走读 + 附录 + 习题解答。</p>
+          <div class="card__tags">
+            <span>Agent</span><span>Plugin</span><span>TypeScript</span><span>源码走读</span>
+          </div>
+          <div class="card__cta">进入教程</div>
+        </a>
+
+        <!-- 规划中：占位 -->
+        <div class="card soon">
+          <div class="card__top">
+            <span class="card__icon">🧩</span>
+            <span class="card__badge warn">规划中</span>
+          </div>
+          <h2 class="card__title">更多教程整理中</h2>
+          <p class="card__desc">本合集将持续收录更多技术教程。如果你有想在这里看到的方向，欢迎反馈，让这块“芯片”越来越大。</p>
+          <div class="card__tags"><span>Coming Soon</span><span>TBD</span></div>
+          <div class="card__cta">敬请期待</div>
+        </div>
+
+        <div class="card soon">
+          <div class="card__top">
+            <span class="card__icon">📍</span>
+            <span class="card__badge warn">占位</span>
+          </div>
+          <h2 class="card__title">预留槽位</h2>
+          <p class="card__desc">这是一个可扩展的合集首页。新增教程只需在 <b>-</b> 处添加一张卡片，即可自动接入本站目录。</p>
+          <div class="card__tags"><span>Slot</span><span>#02</span></div>
+          <div class="card__cta">待填充</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer__row">
+        <span>TUTORIAL.HUB · <a href="https://baimuyuan.online">baimuyuan.online</a></span>
+        <span class="footer__pix"><i></i><i></i><i></i><i></i><i></i></span>
+        <span>CYBER·PIXEL · 2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 顶部时钟
+    const clockEl = document.getElementById('clock');
+    const pad = n => String(n).padStart(2, '0');
+    function tick(){
+      const d = new Date();
+      clockEl.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    }
+    tick(); setInterval(tick, 1000);
+  </script>
+</body>
+</html>
