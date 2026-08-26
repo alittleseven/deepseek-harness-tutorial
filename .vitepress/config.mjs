@@ -1,9 +1,8 @@
 import { defineConfig } from 'vitepress'
 
-// 站点部署到子路径时改成你的 base，例如 "/docs/"；根域部署则保持 '/'
-// base: '/',
-
 export default defineConfig({
+  // 站点部署在子路径 /deepseek-harness-tutorial/ 下（域名 tutorial.baimuyuan.online）
+  base: '/deepseek-harness-tutorial/',
   lang: 'zh-CN',
   title: 'DeepSeek Harness 源码教程',
   description: '插件式 Agent 运行时的架构、机制与源码走读',
