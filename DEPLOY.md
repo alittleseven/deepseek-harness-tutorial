@@ -3,6 +3,22 @@
 本目录已用 **VitePress** 把全部 Markdown 文档构建成一个**分层静态站**，构建产物在 `.vitepress/dist/`。它是纯静态文件（HTML/CSS/JS），只需把里面所有文件上传到任意静态服务器即可。
 （本文件在源目录；`dist` 是最终要上传/托管的内容。）
 
+### 本项目已在用的实际部署（免配置，直接照抄）
+
+- **域名**：`tutorial.baimuyuan.online`（A 记录在 Cloudflare，橙色云 Proxied，代理生效）
+- **服务器**：阿里云 ECS `123.56.2.125`，Nginx 1.18
+- **SSH 登录用户**：`admin`（`root` 被禁 SSH；`admin` 有免密 `sudo`），密钥 `~/.ssh/id_ed25519_penguin`
+- **子路径**：`/deepseek-harness-tutorial/`（`config.mjs` 里 `base` 已设为该值）
+- **网站根目录**：`/www/wwwroot/tutorial.baimuyuan.online`（按域名建目录），内容落在其下的 `deepseek-harness-tutorial/`
+- **Nginx 配置**：`/etc/nginx/sites-available/tutorial.baimuyuan.online`（已 `ln -sf` 到 `sites-enabled`），443 已用 certbot 配好 Let's Encrypt 证书，HTTP 自动 301 到 HTTPS
+- **自动部署**：GitHub Actions 工作流 `.github/workflows/deploy.yml`（push 到 main 触发），`appleboy/scp-action` 直接把 `dist` 传到上面的站点根
+- **本地手动部署**：`bash deploy-local.sh`（构建 + scp 上传同一目录）
+
+> 首次用工作流前，需在 GitHub 仓库 `Settings → Secrets and variables → Actions` 里添加：
+> `SSH_HOST=123.56.2.125`、`SSH_USER=admin`、`SSH_PORT=22`、
+> `SSH_PRIVATE_KEY=<id_ed25519_penguin 私钥完整内容>`、
+> `SSH_DEPLOY_PATH=/www/wwwroot/tutorial.baimuyuan.online/deepseek-harness-tutorial`。
+
 ---
 
 ## 1. 你的产物是什么

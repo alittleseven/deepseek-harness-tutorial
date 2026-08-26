@@ -4,6 +4,8 @@ export default defineConfig({
   // 站点部署在子路径 /deepseek-harness-tutorial/ 下（域名 tutorial.baimuyuan.online）
   base: '/deepseek-harness-tutorial/',
   lang: 'zh-CN',
+  // 这些是源文件/说明文件，不作为独立页面生成（README 已被首页 @include，DEPLOY 是部署说明）
+  srcExclude: ['README.md', 'DEPLOY.md'],
   title: 'DeepSeek Harness 源码教程',
   description: '插件式 Agent 运行时的架构、机制与源码走读',
   cleanUrls: true,

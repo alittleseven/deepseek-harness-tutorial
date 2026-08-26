@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 # 本地一键部署：构建 -> 通过 SSH 把 dist 上传到阿里云子路径
-# 依赖：已把 ~/.ssh/id_ed25519_penguin 的公钥添加到阿里云 ecs 的 /root/.ssh/authorized_keys
+# 依赖：已把 ~/.ssh/id_ed25519_penguin 的公钥添加到阿里云 ecs 的 admin 用户
+#       ~/.ssh/authorized_keys（注意：root 被禁 SSH，只能用 admin，它有免密 sudo）
 # 用法：bash deploy-local.sh
 set -euo pipefail
 
 # ===== 按需修改 =====
 HOST="123.56.2.125"
-USER="root"
+USER="admin"          # 阿里云 ECS 只能用 admin 登录（root 禁 SSH）
 PORT="22"
-KEY="~/.ssh/id_ed25519_penguin"
+KEY="$HOME/.ssh/id_ed25519_penguin"
 
-# 服务器上的部署根目录（请在服务器上确认 Nginx 实际站点根，例如 /www/wwwroot/ 或 /usr/share/nginx/）
+# 服务器上的站点根目录（Nginx 的 root，按域名建的目录）
 # 子路径 /deepseek-harness-tutorial 会自然落在该目录下
-REMOTE_ROOT="/www/wwwroot"
+REMOTE_ROOT="/www/wwwroot/tutorial.baimuyuan.online"
 # ====================
 
 echo "[1/3] 构建静态站 ..."
