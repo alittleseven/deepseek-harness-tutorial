@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "peer": { "id": "dev-book" },
+  "recall": { "peer_scope": "all" }
+}
